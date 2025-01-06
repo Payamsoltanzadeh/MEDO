@@ -30,7 +30,8 @@ from telegram.ext import (
     filters,
     CallbackQueryHandler
 )
-from models import init_db
+
+
 from models import (
     Base,
     User,
@@ -2550,7 +2551,7 @@ signal.signal(signal.SIGTERM, shutdown_handler)
 
 if __name__ == '__main__':
     # Make sure tables exist before starting the bot
-    init_db()  # <-- Call init_db() here
+    init_db()  # <-- This now creates tables in Postgres
 
     logger.info("شروع ربات...")
     try:
