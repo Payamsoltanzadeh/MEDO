@@ -11,7 +11,7 @@ import smtplib
 import ssl
 from sqlalchemy.orm import joinedload
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# Removed: from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from dotenv import load_dotenv
 from sqlalchemy.exc import IntegrityError
 
@@ -31,7 +31,6 @@ from telegram.ext import (
     CallbackQueryHandler
 )
 
-
 from models import (
     Base,
     User,
@@ -41,7 +40,7 @@ from models import (
     Specialization,
     engine,
     Session,
-    init_db  # <--- add this
+    init_db
 )
 
 # Load environment variables
@@ -74,7 +73,10 @@ EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 RECEIPTS_DIR = "receipts"
 os.makedirs(RECEIPTS_DIR, exist_ok=True)
 
-scheduler = AsyncIOScheduler()
+# --- REMOVED APScheduler section ---
+# e.g., scheduler = AsyncIOScheduler()
+# scheduler.start()
+# logger.info("زمان‌بندی شروع شد.")
 
 # Define Conversation States
 (
@@ -100,7 +102,7 @@ scheduler = AsyncIOScheduler()
     DEV_ADD_DOCTOR_CHOOSE_SPECIALIZATION,
     DEV_ADD_DOCTOR_NAME,
     DEV_ADD_DOCTOR_AVAILABILITY,
-    DEV_REMOVE_DOCTOR_CHOOSE_SPECIALization,  # Note the capitalization mismatch in variable name
+    DEV_REMOVE_DOCTOR_CHOOSE_SPECIALization,  # Note the capitalization mismatch
     DEV_REMOVE_DOCTOR_SELECT,
     CONFIRM_REMOVE_DOCTOR,
     SEND_MESSAGE_TO_USER,
@@ -108,7 +110,6 @@ scheduler = AsyncIOScheduler()
     PAYMENT_APPOINTMENT_ID,
     PAYMENT_RECEIPT
 ) = range(29)
-
 
 ##################
 # Keyboards
@@ -230,7 +231,6 @@ def send_email(to_email: str, subject: str, body: str):
         logger.info(f"ایمیل به {to_email} ارسال شد.")
     except Exception as e:
         logger.error(f"خطا در ارسال ایمیل: {e}")
-
 
 ##################
 # Handler Functions
@@ -2408,6 +2408,8 @@ async def edit_email(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 # Conversation Handler
 ##################
 
+from telegram.ext import ConversationHandler
+
 conv_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
@@ -2466,10 +2468,11 @@ conv_handler = ConversationHandler(
     allow_reentry=True
 )
 
-
 ##################
 # Application Setup
 ##################
+
+from telegram.ext import ApplicationBuilder, CallbackQueryHandler
 
 application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 application.add_handler(conv_handler)
@@ -2499,10 +2502,10 @@ async def send_test_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         parse_mode="Markdown")
         return
     try:
-        test_photo_path = "test_receipt.jpg"  # Ensure this file exists in your project directory
+        test_photo_path = "test_receipt.jpg"  # Ensure this file exists
         if not os.path.exists(test_photo_path):
             await update.message.reply_text(
-                "*❌ فایل رسید تست پیدا نشد.* لطفاً اطمینان حاصل کنید که 'test_receipt.jpg' در دایرکتوری ربات موجود است.",
+                "*❌ فایل رسید تست پیدا نشد.* لطفاً مطمئن شوید که 'test_receipt.jpg' در دایرکتوری ربات موجود است.",
                 parse_mode="Markdown")
             return
         with open(test_photo_path, 'rb') as photo_file:
@@ -2520,17 +2523,8 @@ async def send_test_receipt(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         parse_mode="Markdown")
 
 
-# Add temporary handlers (Remove these after verification)
 application.add_handler(CommandHandler('getdevid', get_developer_id, filters=filters.User(DEVELOPER_CHAT_ID)))
 application.add_handler(CommandHandler('sendtestreceipt', send_test_receipt, filters=filters.User(DEVELOPER_CHAT_ID)))
-
-
-##################
-# Scheduler (Optional)
-##################
-
-scheduler.start()
-logger.info("زمان‌بندی شروع شد.")
 
 
 ##################
@@ -2539,8 +2533,8 @@ logger.info("زمان‌بندی شروع شد.")
 
 def shutdown_handler(signum, frame):
     logger.info("در حال خاموش‌سازی...")
-    scheduler.shutdown()
     sys.exit(0)
+
 
 signal.signal(signal.SIGINT, shutdown_handler)
 signal.signal(signal.SIGTERM, shutdown_handler)
@@ -2551,11 +2545,10 @@ signal.signal(signal.SIGTERM, shutdown_handler)
 
 if __name__ == '__main__':
     # Make sure tables exist before starting the bot
-    init_db()  # <-- This now creates tables in Postgres
+    init_db()
 
     logger.info("شروع ربات...")
     try:
         application.run_polling()
     except KeyboardInterrupt:
         logger.info("ربات توسط KeyboardInterrupt متوقف شد.")
-        scheduler.shutdown()
