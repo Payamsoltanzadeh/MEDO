@@ -24,7 +24,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 # 2) Fallback to your known Railway URL if the env var is not set
 #    (Alternatively, you can remove the fallback and *require* the env var.)
 if not DATABASE_URL:
-    DATABASE_URL = "postgresql://postgres:QHmZuNICMajSsFhTZYqFpXVeRBntmaWZ@postgres.railway.internal:5432/railway"
+    DATABASE_URL = "postgresql://postgres:TvBCgsVsAPCoGPJfNilvCCdHNktbUNiL@postgres-8dzg.railway.internal:5432/railway"
 
 # 3) Create the engine and session factory
 engine = create_engine(DATABASE_URL, echo=False)
