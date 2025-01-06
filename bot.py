@@ -1019,7 +1019,7 @@ async def register_phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     email = context.user_data.get('reg_email')
 
     with Session() as session:
-        existing_user = session.query(User).filter_by(telegram_id=user_id).first()
+        existing_user = session.query(User).filter_by(telegram_id=str(user_id)).first()
         if existing_user:
             existing_user.name = name
             existing_user.email = email
@@ -1028,7 +1028,7 @@ async def register_phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             user = existing_user  # **Define 'user' here**
         else:
             new_user = User(
-                telegram_id=user_id,
+                telegram_id=str(user_id),
                 name=name,
                 email=email,
                 phone=phone
