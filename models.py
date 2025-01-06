@@ -1,18 +1,38 @@
-# models.py
-
+import os
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, create_engine
+
+from sqlalchemy import (
+    Column, Integer, String, ForeignKey, Boolean,
+    DateTime, Text, create_engine
+)
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+# Optional: If you want to load .env files locally
+# (On Railway, environment variables come from the project's settings.)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 Base = declarative_base()
 
-# Replace with your actual database URL
-DATABASE_URL = "sqlite:///bot_database.db"  # For SQLite (development or testing)
+# 1) Get DATABASE_URL from environment
+DATABASE_URL = os.getenv("DATABASE_URL")
 
+# 2) Fallback to your known Railway URL if the env var is not set
+#    (Alternatively, you can remove the fallback and *require* the env var.)
+if not DATABASE_URL:
+    DATABASE_URL = "postgresql://postgres:QHmZuNICMajSsFhTZYqFpXVeRBntmaWZ@postgres.railway.internal:5432/railway"
+
+# 3) Create the engine and session factory
 engine = create_engine(DATABASE_URL, echo=False)
 Session = sessionmaker(bind=engine)
 
+# ------------------
+# Model definitions
+# ------------------
 
 class User(Base):
     __tablename__ = 'users'
@@ -35,6 +55,7 @@ class Specialization(Base):
 
     # No cascade:
     doctors = relationship("Doctor", back_populates="specialization")
+
 
 class Doctor(Base):
     __tablename__ = 'doctors'
