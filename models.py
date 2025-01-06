@@ -21,10 +21,9 @@ Base = declarative_base()
 # 1) Get DATABASE_URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# 2) Fallback to your known Railway URL if the env var is not set
-#    (Alternatively, you can remove the fallback and *require* the env var.)
+
 if not DATABASE_URL:
-    DATABASE_URL = "postgresql://postgres:TvBCgsVsAPCoGPJfNilvCCdHNktbUNiL@postgres-8dzg.railway.internal:5432/railway"
+    raise ValueError("DATABASE_URL environment variable is not set.")
 
 # 3) Create the engine and session factory
 engine = create_engine(DATABASE_URL, echo=False)
