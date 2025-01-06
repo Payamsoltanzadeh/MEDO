@@ -38,14 +38,13 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True, nullable=False)
+    telegram_id = Column(String, nullable=False)
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     phone = Column(String(50), nullable=False)
 
     appointments = relationship("Appointment", back_populates="user")
     certificates = relationship("HealthCertificate", back_populates="user")
-
 
 class Specialization(Base):
     __tablename__ = 'specializations'
