@@ -557,7 +557,7 @@ async def appointment_choose_doctor(update: Update, context: ContextTypes.DEFAUL
         - 🕒 *جلسه ۴۵ دقیقه‌ای:* ۹٫۹۹€
         - 📦 *پک چند جلسه‌ای:* از طریق پشتیبانی در دسترس است.
 
-        📝 **مشکل خود را توضیح دهید:**""",
+        📝 **لطفا شرح مختصری از مشکل خود بفرمایید:**""",
             parse_mode="Markdown",
             reply_markup=back_cancel_menu_keyboard()
         )
@@ -618,7 +618,7 @@ async def appointment_contact_method(update: Update, context: ContextTypes.DEFAU
     - 🕒 *جلسه ۴۵ دقیقه‌ای:* ۹٫۹۹€
     - 📦 *پک چند جلسه‌ای:* از طریق پشتیبانی در دسترس است.
 
-    📝 **مشکل خود را توضیح دهید:**""",
+    📝 **لطفا شرح مختصری از مشکل خود بفرمایید:**""",
         parse_mode="Markdown",
         reply_markup=back_cancel_menu_keyboard()
     )
@@ -659,7 +659,7 @@ async def appointment_description(update: Update, context: ContextTypes.DEFAULT_
             - 🕒 *جلسه ۴۵ دقیقه‌ای:* ۹٫۹۹€
             - 📦 *پک چند جلسه‌ای:* از طریق پشتیبانی در دسترس است.
 
-            📝 **مشکل خود را توضیح دهید:**""",
+            📝 **لطفا شرح مختصری از مشکل خود بفرمایید:**""",
                 parse_mode="Markdown",
                 reply_markup=back_cancel_menu_keyboard()
             )
