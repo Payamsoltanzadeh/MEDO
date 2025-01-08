@@ -648,7 +648,7 @@ async def appointment_description(update: Update, context: ContextTypes.DEFAULT_
             logger.info(f"کاربر {user_id} روش ارتباطی را به صورت خودکار تنظیم کرد: {selected_method}")
             await update.message.reply_text(
                 """👨‍⚕ **پزشک عمومی**
-            - 📞 *مشاوره تلفنی:* ۹٫۸۹€
+            - 📞 *مشاوره تلفنی(15 دقیقه):* ۹٫۹۹€
             - 🏠 *ویزیت حضوری در منزل تورین:* ۲۹€
 
             🧴 **پزشک متخصص**
@@ -656,7 +656,7 @@ async def appointment_description(update: Update, context: ContextTypes.DEFAULT_
             - 🏠 *ویزیت حضوری در منزل:* در حال حاضر فقط تلفنی امکان‌پذیر است.
 
             🧠 **مشاوره روانشناسی**
-            - 🕒 *جلسه ۴۵ دقیقه‌ای:* ۸٫۹۹€
+            - 🕒 *جلسه ۴۵ دقیقه‌ای:* ۹٫۹۹€
             - 📦 *پک چند جلسه‌ای:* از طریق پشتیبانی در دسترس است.
 
             📝 **مشکل خود را توضیح دهید:**""",
@@ -2486,7 +2486,6 @@ application.add_handler(CommandHandler('sendmsg', send_message_to_user, filters=
 ##################
 # Temporary Handlers for Verification
 ##################
-
 # Temporary command to get developer's chat ID
 async def get_developer_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
